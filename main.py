@@ -14,7 +14,7 @@ class SistemaVeiculos:
     def __init__(self, root):
         self.root = root
         self.root.title("Sistema de Cadastro de Veículos e Proprieatrios")
-        self.root.geometry("1000x800")
+        self.root.geometry("500x500")
         self.root.resizable(True, True)
         
         # Lista para armazenar os veículos cadastrados
@@ -180,10 +180,6 @@ class SistemaVeiculos:
         self.propritario_placa_entry = tk.Entry(form_frame, width=20)
         self.propritario_placa_entry.grid(row=2, column=1, sticky="w", pady=5)
         
-        tk.Label(form_frame, text="Veiculo:").grid(row=3, column=0, sticky="e", pady=5)
-        self.veiculo_entry = tk.Entry(form_frame, width=6)
-        self.veiculo_entry.grid(row=3, column=1, sticky="w", pady=5)
-        
         # Botões de ação
         botoes_frame = tk.Frame(self.tela_cadastroProprietario)
         botoes_frame.pack(pady=20)
@@ -255,7 +251,7 @@ class SistemaVeiculos:
         
     def configurar_tela_listagemProprietario(self):
         # Título
-        titulo = tk.Label(self.tela_listagemProprietario, text="PROPRITARIOS CADASTRADOS", font=("Arial", 16, "bold"))
+        titulo = tk.Label(self.tela_listagemProprietario, text="PROPRIETARIOS CADASTRADOS", font=("Arial", 16, "bold"))
         titulo.pack(pady=20)
         
         # Frame para filtro
@@ -263,8 +259,8 @@ class SistemaVeiculos:
         filtro_frame.pack(fill="x", padx=20, pady=5)
         
         tk.Label(filtro_frame, text="Filtrar:").pack(side="left")
-        self.filtro_propiretario_var = tk.StringVar(value="Todos")
-        filtro_combo = ttk.Combobox(filtro_frame, textvariable=self.filtro_propiretario_var,
+        self.filtro_proprietario_var = tk.StringVar(value="Todos")
+        filtro_combo = ttk.Combobox(filtro_frame, textvariable=self.filtro_proprietario_var,
                              values=["Todos", "Nome", "Cpf", "Placa do veiculo"], width=15)
         filtro_combo.pack(side="left", padx=5)
 
@@ -295,7 +291,7 @@ class SistemaVeiculos:
         botoes_frame.pack(pady=15)
         
         tk.Button(botoes_frame, text="Ver Detalhes", width=12,
-        command=self.ver_detalhes).pack(side="left", padx=5)
+        command=self.ver_detalhesProprietario).pack(side="left", padx=5)
         
         tk.Button(botoes_frame, text="Voltar", width=12,
                 command=lambda: self.mostrar_tela(self.tela_principal)).pack(side="left", padx=5)
@@ -417,7 +413,7 @@ class SistemaVeiculos:
                 messagebox.showwarning("Veículo não encontrado", f"A placa '{placa_associada}' não corresponde a nenhum veículo cadastrado.")
                 return
 
-        proprietario = Proprietario(nome, cpf, placa_associada, veiculo_encontrado)
+        proprietario = Proprietario(nome, cpf, placa_associada)
         self.proprietarios.append(proprietario)
         messagebox.showinfo("Sucesso", "Proprietário cadastrado com sucesso!")
 
@@ -460,16 +456,16 @@ class SistemaVeiculos:
         self.propritario_listbox.delete(0, "end")
         
         # Filtrar veículos pelo tipo
-        filtro = self.filtro_propiretario_var.get()
+        filtroProprietario = self.filtro_proprietario_var.get()
         
         for proprietario in self.proprietarios:
-            if filtro == "Todos":
+            if filtroProprietario == "Todos":
+                self.propritario_listbox.insert("end", str(Proprietario))
+            elif filtroProprietario == "Nome" and isinstance(proprietario,Proprietario):
                 self.propritario_listbox.insert("end", str(proprietario))
-            elif filtro == "Nome" and isinstance(proprietario):
+            elif filtroProprietario == "Cpf" and isinstance(proprietario,Proprietario):
                 self.propritario_listbox.insert("end", str(proprietario))
-            elif filtro == "Cpf" and isinstance(proprietario):
-                self.propritario_listbox.insert("end", str(proprietario))
-            elif filtro == "Veiculo" and isinstance(proprietario):
+            elif filtroProprietario == "Placa" and isinstance(proprietario,Proprietario):
                 self.propritario_listbox.insert("end", str(proprietario))
 
     def ver_detalhes(self):
@@ -508,6 +504,35 @@ class SistemaVeiculos:
         
         # Mostrar detalhes
         messagebox.showinfo("Detalhes do Veículo", detalhes)
+
+    def ver_detalhesProprietario(self):
+        # Obter o índice selecionado
+        selecionado = self.propritario_listbox.curselection()
+        if not selecionado:
+            messagebox.showinfo("Aviso", "Selecione um Proprietario para ver os detalhes")
+            return
+        
+        # Obter o Proprietario correspondente à seleção
+        filtroProprietario = self.filtro_proprietario_var.get()
+        proprietario_filtrados = []
+        
+        for proprietario in self.proprietarios:
+            if filtroProprietario == "Todos":
+                proprietario_filtrados.append(proprietario)
+            elif filtroProprietario == "Nome" and isinstance(proprietario, Proprietario):
+                proprietario_filtrados.append(proprietario)
+            elif filtroProprietario == "Cpf" and isinstance(proprietario, Proprietario):
+                proprietario_filtrados.append(proprietario)
+            elif filtroProprietario == "Placa" and isinstance(proprietario, Proprietario):
+                proprietario_filtrados.append(proprietario)
+        
+        proprietario = proprietario_filtrados[selecionado[0]]
+        
+        # Montar a mensagem de detalhes usando polimorfismo
+        detalhesProprietario = str(proprietario)
+        
+        # Mostrar detalhes
+        messagebox.showinfo("Detalhes do Proprietario", detalhesProprietario)
 
     # Dentro da sua classe SistemaVeiculos
 
