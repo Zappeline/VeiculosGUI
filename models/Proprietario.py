@@ -17,6 +17,5 @@ class Proprietario:
 
 
     def __str__(self):
-        f"({self.placa_veiculo})" if self.placa_veiculo else "Nenhum"
         return (f"Nome: {self.nome}, CPF: {self.cpf}, Placa: {self.placa_veiculo}")
        
