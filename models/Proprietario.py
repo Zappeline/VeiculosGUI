@@ -17,5 +17,6 @@ class Proprietario:
 
 
     def __str__(self):
-        return (f"Nome: {self.nome}, CPF: {self.cpf}, Placa: {self.placa_veiculo}")
+        info = f"Nome: {self.nome}, CPF: {self.cpf}, Placa: {self.placa_veiculo} Veiculo: {self.veiculo}"
+        return info
        
