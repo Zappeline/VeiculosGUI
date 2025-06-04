@@ -8,7 +8,6 @@ from tkinter import ttk, messagebox
 import re
 from datetime import datetime
 
-
 # Classe principal
 class SistemaVeiculos:
     def __init__(self, root):
@@ -279,11 +278,11 @@ class SistemaVeiculos:
         scrollbar.pack(side="right", fill="y")
         
         # Listbox
-        self.propritario_listbox = tk.Listbox(lista_frame, width=70, height=10, font=("Arial", 10))
-        self.propritario_listbox.pack(side="left", fill="both", expand=True)
+        self.proprietario_listbox = tk.Listbox(lista_frame, width=70, height=10, font=("Arial", 10))
+        self.proprietario_listbox.pack(side="left", fill="both", expand=True)
         
         # Configura scrollbar
-        self.propritario_listbox.config(yscrollcommand=scrollbar.set)
+        self.proprietario_listbox.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=self.listbox.yview)
         
         # Botões
@@ -453,20 +452,20 @@ class SistemaVeiculos:
 
     def filtrar_proprietario(self):
         # Limpar a lista
-        self.propritario_listbox.delete(0, "end")
+        self.proprietario_listbox.delete(0, "end")
         
         # Filtrar veículos pelo tipo
         filtroProprietario = self.filtro_proprietario_var.get()
         
         for proprietario in self.proprietarios:
             if filtroProprietario == "Todos":
-                self.propritario_listbox.insert("end", str(Proprietario))
+                self.proprietario_listbox.insert("end", str(Proprietario))
             elif filtroProprietario == "Nome" and isinstance(proprietario,Proprietario):
-                self.propritario_listbox.insert("end", str(proprietario))
+                self.proprietario_listbox.insert("end", str(proprietario))
             elif filtroProprietario == "Cpf" and isinstance(proprietario,Proprietario):
-                self.propritario_listbox.insert("end", str(proprietario))
+                self.proprietario_listbox.insert("end", str(proprietario))
             elif filtroProprietario == "Placa" and isinstance(proprietario,Proprietario):
-                self.propritario_listbox.insert("end", str(proprietario))
+                self.proprietario_listbox.insert("end", str(proprietario))
 
     def ver_detalhes(self):
         # Obter o índice selecionado
@@ -527,10 +526,17 @@ class SistemaVeiculos:
                 proprietario_filtrados.append(proprietario)
         
         proprietario = proprietario_filtrados[selecionado[0]]
-        
+        for veiculo in self.veiculos:
+            if veiculo.get_placa() == proprietario.get_placa_veiculo():
+                modelo = f"Veículo: {veiculo.get_marca()} {veiculo.get_modelo()} ({veiculo.get_ano()})"
+                break
         # Montar a mensagem de detalhes usando polimorfismo
-        detalhesProprietario = str(proprietario)
-        
+        detalhesProprietario = proprietario.__str__()
+        detalhesProprietario += f"\nPlaca do Veículo: {proprietario.get_placa_veiculo() if proprietario.get_placa_veiculo() else 'Nenhum veículo associado'}"
+        detalhesProprietario += f"\n{modelo if 'modelo' in locals() else 'Nenhum veículo associado'}"
+        detalhesProprietario += f"\nCPF: {proprietario.get_cpf()}"
+        detalhesProprietario += f"\nNome: {proprietario.get_nome()}"
+       
         # Mostrar detalhes
         messagebox.showinfo("Detalhes do Proprietario", detalhesProprietario)
 

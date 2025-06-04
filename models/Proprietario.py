@@ -1,9 +1,11 @@
-class Proprietario:
+from models import Veiculo
+
+class Proprietario():
     def __init__(self, nome, cpf, placa_veiculo=None):
         self.nome = nome
         self.cpf = cpf
         self.placa_veiculo = placa_veiculo # Placa do veículo que possui
-
+        
        
 
     def get_nome(self):
@@ -17,6 +19,6 @@ class Proprietario:
 
 
     def __str__(self):
-        info = f"Nome: {self.nome}, CPF: {self.cpf}, Placa: {self.placa_veiculo} Veiculo: {self.veiculo}"
+        info = f"Nome: {self.nome}, CPF: {self.cpf}, Placa: {self.placa_veiculo}"
         return info
        
