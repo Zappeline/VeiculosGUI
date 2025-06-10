@@ -283,7 +283,7 @@ class SistemaVeiculos:
         
         # Configura scrollbar
         self.proprietario_listbox.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=self.listbox.yview)
+        scrollbar.config(command=self.proprietario_listbox.yview)
         
         # Botões
         botoes_frame = tk.Frame(self.tela_listagemProprietario)
@@ -459,7 +459,7 @@ class SistemaVeiculos:
         
         for proprietario in self.proprietarios:
             if filtroProprietario == "Todos":
-                self.proprietario_listbox.insert("end", str(Proprietario))
+                self.proprietario_listbox.insert("end", str(proprietario))
             elif filtroProprietario == "Nome" and isinstance(proprietario,Proprietario):
                 self.proprietario_listbox.insert("end", str(proprietario))
             elif filtroProprietario == "Cpf" and isinstance(proprietario,Proprietario):
@@ -506,7 +506,7 @@ class SistemaVeiculos:
 
     def ver_detalhesProprietario(self):
         # Obter o índice selecionado
-        selecionado = self.propritario_listbox.curselection()
+        selecionado = self.proprietario_listbox.curselection()
         if not selecionado:
             messagebox.showinfo("Aviso", "Selecione um Proprietario para ver os detalhes")
             return
